@@ -17,12 +17,13 @@ const SALT_ROUNDS = 10;
 // 2. DATABASE CONFIGURATION
 // NOTE: Ensure your MySQL server is running and the 'mialma' database exists.
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', 
-    database: 'mialma',
+  host: 'sqlXXX.freehostingnoads.net', // your FreeHostingNoAds host
+  user: 'u123456789_root',             // your database username
+  password: '1Mialma@123',            // your database password
+  database: '4644643_mialma',     // your database name
     multipleStatements: true 
 });
+
 
 db.connect(err => {
     if (err) {
