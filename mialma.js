@@ -69,7 +69,7 @@ const isAuthenticated = (req, res, next) => {
 };
 
 // 4. EMBEDDED CSS, JAVASCRIPT & HTML TEMPLATES
-// --- FINAL REFINED STYLES (Includes Reduced Height & Preloader Styles) ---
+// --- STYLES (Kept the same as last update for brevity) ---
 const STYLES = `
 /* MiAlma Final Refined Styles */
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
@@ -92,7 +92,6 @@ body {
     background-color: #f5f5f5; 
     color: var(--text-color);
     display: flex;
-    /* CRITICAL: Ensure body is sized and centered */
     flex-direction: column; 
     min-height: 100vh;
     align-items: center; 
@@ -130,7 +129,7 @@ a:hover {
     margin: 50px auto;
 }
 
-input[type="text"], input[type="password"], input[type="date"], textarea, input[type="file"] {
+input[type="text"], input[type="password"], input[type="date"], textarea, input[type="file"], input[type="range"] {
     width: 100%;
     padding: 12px;
     margin: 8px 0 20px 0;
@@ -139,6 +138,24 @@ input[type="text"], input[type="password"], input[type="date"], textarea, input[
     border-radius: 6px;
     box-sizing: border-box;
     font-size: 1em;
+}
+
+/* Password Toggle Container */
+.password-container {
+    position: relative;
+    margin: 8px 0 20px 0;
+}
+.password-container input {
+    margin: 0; 
+    padding-right: 40px; 
+}
+.password-container .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
 }
 
 button {
@@ -167,8 +184,8 @@ button i { font-size: 1.2em; }
 /* --- App Layout (Fixed Reduced Height) --- */
 .app-wrapper {
     max-width: 1000px;
-    width: 95%; /* Better width control */
-    height: 90vh; /* Reduced height, fixed to viewport */
+    width: 95%;
+    height: 90vh; 
     min-height: 600px;
     max-height: 800px;
     margin: 20px auto;
@@ -225,14 +242,15 @@ button i { font-size: 1.2em; }
     padding: 20px;
     background-color: white;
     position: relative;
-    overflow-y: hidden; /* Main content handles views, not its wrapper */
+    overflow-y: hidden;
     height: 100%;
     display: flex;
     flex-direction: column;
     transition: opacity var(--transition-duration);
-    box-sizing: border-box; /* Fixes padding issue */
+    box-sizing: border-box; 
 }
 
+/* Updated Header */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -242,18 +260,31 @@ button i { font-size: 1.2em; }
     border-bottom: 1px solid #eee;
     flex-shrink: 0;
 }
-
-.settings-icon {
-    font-size: 28px;
-    cursor: pointer;
+.app-header .header-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.app-header .profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--secondary-color);
+}
+.app-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: var(--text-color);
+}
+.app-header h2 i {
     color: var(--primary-color);
-    transition: color var(--transition-duration);
+    margin-right: 8px;
 }
-.settings-icon:hover {
-    color: var(--accent-color);
-}
+/* Removed settings-icon styles as it is removed from header */
 
-/* --- Preloader Styles --- */
+
+/* --- Preloader Styles (Kept the same) --- */
 #preloader {
     position: absolute;
     top: 0;
@@ -317,25 +348,26 @@ button i { font-size: 1.2em; }
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    min-height: 0; /* Important for flex child sizing */
+    min-height: 0; 
 }
 
 #messages-container {
     flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
-    background-color: var(--background-color);
+    background-color: var(--background-color); /* Fallback */
     border-radius: 10px;
     position: relative;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
     margin-bottom: 10px;
+    /* Opacity will be controlled by JS for background image */
 }
 
 .message {
     padding: 12px 15px; 
     margin-bottom: 10px;
     border-radius: 20px; 
-    max-width: 80%;
+    max-width: 40%;
     word-wrap: break-word;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -361,11 +393,24 @@ button i { font-size: 1.2em; }
     margin-top: 5px;
 }
 
+.message-content img, .message-content video {
+    max-width: 40%; 
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+.message-content audio {
+    width: 100%;
+    margin-top: 5px;
+}
+
 .chat-input-area {
-    padding: 10px 0 0 0; /* CRITICAL: Fixed padding */
+    padding: 10px 0 0 0; 
     background-color: white;
     border-top: 1px solid #eee;
-    flex-shrink: 0; /* Prevents input area from shrinking */
+    flex-shrink: 0; 
 }
 
 #chat-input-row {
@@ -426,10 +471,34 @@ button i { font-size: 1.2em; }
     font-size: 1.5em;
     animation: pulse 1s infinite;
 }
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
 
-/* ... (Post view, copy-button, responsive styles remain the same) ... */
 
-/* Responsive adjustments for mobile */
+/* Post View Styles */
+.post {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.post strong {
+    color: var(--primary-color);
+}
+.post-actions button {
+    border-radius: 6px !important; 
+    width: 48% !important; 
+    height: auto !important;
+    padding: 8px 15px !important;
+    font-size: 1em;
+}
+
+/* Responsive adjustments (Kept the same) */
 @media (max-width: 768px) {
     .app-wrapper {
         margin: 0;
@@ -510,9 +579,11 @@ const HEART_ANIMATION_CSS = \`
 if (!document.querySelector('style[data-heart-css]')) {
     const style = document.createElement('style');
     style.setAttribute('data-heart-css', 'true');
-    style.innerHTML = HEART_ANIMATION_CSS;
     document.head.appendChild(style);
 }
+// Set initial CSS (must be done after element is appended for some browsers)
+document.querySelector('style[data-heart-css]').innerHTML = HEART_ANIMATION_CSS;
+
 
 // --- Navigation Logic ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -527,22 +598,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelector('.settings-icon')?.addEventListener('click', () => {
-        loadView('settings');
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        document.querySelector('[data-view="settings"]').classList.add('active');
-    });
-    
     // Initial load (only if we are on the app layout)
     if(document.getElementById('app-layout')) {
         loadView('chat');
         document.querySelector('[data-view="chat"]').classList.add('active');
     }
+    setupPasswordToggles(); // Setup toggles on login/signup pages too
 });
+
+// Password Toggle Functionality
+function setupPasswordToggles() {
+    document.querySelectorAll('.toggle-password').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            const passwordInput = this.previousElementSibling; 
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('bi-eye-slash-fill');
+            this.classList.toggle('bi-eye-fill');
+        });
+    });
+}
 
 
 // Load content into the main area (Includes Preloader Logic)
 async function loadView(viewName) {
+    console.log("Loading view:", viewName);
     currentView = viewName;
     if (window.chatInterval) clearInterval(window.chatInterval);
     if (window.heartInterval) clearInterval(window.heartInterval);
@@ -562,6 +642,7 @@ async function loadView(viewName) {
                 if (!window.heartInterval) window.heartInterval = setInterval(createHeart, 1000);
                 setupChatListeners();
                 await fetchMessages(); 
+                // CRUCIAL: Re-start polling only for chat view
                 window.chatInterval = setInterval(fetchMessages, 3000); 
             } else {
                  isRecordingVoice = false;
@@ -574,10 +655,11 @@ async function loadView(viewName) {
                  setupSettingsFormListeners();
             }
         } else {
+            console.error(\`Failed to load view \${viewName}: \${response.status} \${response.statusText}\`);
             mainContent.innerHTML = '<div style="text-align: center; padding-top: 50px;"><h2><i class="bi bi-x-circle"></i> Error loading content.</h2><p>Could not load the requested view.</p></div>';
         }
     } catch (error) {
-        console.error('Fetch error:', error);
+        console.error('Fetch error loading view:', viewName, error);
         mainContent.innerHTML = '<div style="text-align: center; padding-top: 50px;"><h2><i class="bi bi-wifi-off"></i> Network Error.</h2><p>Please check your connection and try again.</p></div>';
     } finally {
         // 2. Hide preloader and show content
@@ -590,21 +672,25 @@ async function loadView(viewName) {
 
 // --- Chat Logic ---
 function setupChatListeners() {
-    const chatInput = document.getElementById('chat-message-input');
+    console.log("Setting up chat listeners...");
     const sendBtn = document.getElementById('send-message-button');
     const voiceNoteBtn = document.getElementById('voice-note-button');
     const mediaInput = document.getElementById('chat-media-input');
     const voiceInputArea = document.getElementById('voice-input-area');
-    const form = document.getElementById('chat-form');
+    const chatForm = document.getElementById('chat-form'); 
     
-    if (!voiceInputArea || !sendBtn || !form) return;
+    // Safety check for critical elements
+    if (!voiceInputArea || !sendBtn || !chatForm) {
+        console.warn("Chat elements not found, skipping chat listener setup.");
+        return;
+    }
     
     // Voice Note Toggler
     if (voiceNoteBtn) {
         voiceNoteBtn.addEventListener('click', () => {
             isRecordingVoice = !isRecordingVoice;
             if (isRecordingVoice) {
-                // Simulate recording UI
+                // SIMULATE recording UI
                 voiceInputArea.innerHTML = \`
                     <div class="voice-recording-ui">
                         <i class="bi bi-mic-fill"></i> Recording <span>...</span>
@@ -622,7 +708,8 @@ function setupChatListeners() {
                 voiceInputArea.innerHTML = \`
                     <input type="text" id="chat-message-input" placeholder="Type a message..." autocomplete="off">
                 \`;
-                setupChatListeners(); // Re-set listeners for the new input field
+                // Re-setup all chat listeners for the newly created input field
+                setupChatListeners(); 
             }
             toggleSendButtonState();
         });
@@ -639,29 +726,32 @@ function setupChatListeners() {
             if(mediaBtn) mediaBtn.style.display = 'none';
             if(voiceBtn) voiceBtn.style.display = 'none';
         } else {
-            sendBtn.style.display = 'flex';
+            sendBtn.style.display = 'flex'; // Ensure button is visible
             if(mediaBtn) mediaBtn.style.display = 'block';
             if(voiceBtn) voiceBtn.style.display = 'block';
 
-            if (currentInput && currentInput.value.length > 0) {
+            if (currentInput && currentInput.value.trim().length > 0) {
                 sendBtn.innerHTML = '<i class="bi bi-send-fill"></i>';
                 sendBtn.classList.remove('heart');
                 sendBtn.classList.add('text');
+                sendBtn.setAttribute('title', 'Send Message');
             } else {
                 sendBtn.innerHTML = '<i class="bi bi-heart-fill"></i>';
                 sendBtn.classList.add('heart');
                 sendBtn.classList.remove('text');
+                sendBtn.setAttribute('title', 'Send Heart');
             }
         }
     }
 
-    // Input listener
-    if (chatInput) {
-        chatInput.addEventListener('input', toggleSendButtonState);
-        chatInput.addEventListener('keydown', (e) => {
+    // Input listener for the message field
+    const currentChatInput = document.getElementById('chat-message-input');
+    if (currentChatInput) {
+        currentChatInput.addEventListener('input', toggleSendButtonState);
+        currentChatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                form.dispatchEvent(new Event('submit'));
+                chatForm.dispatchEvent(new Event('submit'));
             }
         });
     }
@@ -670,24 +760,37 @@ function setupChatListeners() {
 
 
     // Handle Form Submission (Text or Heart)
-    form.addEventListener('submit', async (e) => {
+    chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const currentInput = document.getElementById('chat-message-input');
-        const content = currentInput ? (currentInput.value.trim() || '❤️') : '❤️';
-        if(currentInput) currentInput.value = ''; 
+        const content = currentInput ? (currentInput.value.trim()) : '';
+        const type = (currentInput && content.length > 0) ? 'text' : 'heart'; 
         
+        // Prevent sending empty messages if not a heart
+        if (content.length === 0 && type !== 'heart') return;
+
+        // Clear input and toggle state immediately
+        if (currentInput) currentInput.value = ''; 
         toggleSendButtonState();
 
         try {
-            await fetch('/chat/send', {
+            const response = await fetch('/chat/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: content })
+                body: JSON.stringify({ message: content.length > 0 ? content : '❤️', message_type: type })
             });
-            await fetchMessages();
+
+            if (response.ok) {
+                 console.log("Message sent successfully (API call ok). Fetching messages now...");
+                await fetchMessages();
+            } else {
+                const errorData = await response.json();
+                console.error("Server responded with error:", errorData);
+                alert('Failed to send message: ' + (errorData.error || 'Unknown error.'));
+            }
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('Network error sending message:', error);
             alert('Network error while sending message.');
         }
     });
@@ -711,22 +814,25 @@ function setupChatListeners() {
             });
 
             if (response.ok) {
+                console.log("Media sent successfully (API call ok). Fetching messages now...");
                 await fetchMessages();
             } else {
-                alert('Failed to upload media.');
+                const errorData = await response.json();
+                alert('Failed to upload media: ' + (errorData.error || 'Unknown error.'));
             }
         } catch (error) {
             console.error('Error uploading media:', error);
             alert('Network error while uploading media.');
         } finally {
              if (preloader) preloader.classList.remove('show');
-             e.target.value = null; 
+             e.target.value = null; // Clear the input so same file can be uploaded again
         }
     });
 }
 
 // Voice Note Listeners
 function setupVoiceNoteListeners() {
+    console.log("Setting up voice note listeners...");
     const sendVoiceBtn = document.getElementById('send-voice-note-button');
     const cancelVoiceBtn = document.getElementById('cancel-voice-note-button');
 
@@ -736,21 +842,33 @@ function setupVoiceNoteListeners() {
         document.getElementById('voice-input-area').innerHTML = \`
              <input type="text" id="chat-message-input" placeholder="Type a message..." autocomplete="off">
         \`;
-        setupChatListeners(); 
+        setupChatListeners(); // Re-set listeners for the new input field
     };
 
     sendVoiceBtn?.addEventListener('click', async () => {
         restoreNormalInput();
         try {
-            // Simulated upload 
-            await fetch('/chat/send', {
+            // Simulated upload - Sending a placeholder audio file URL
+            const response = await fetch('/chat/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: 'Simulated Voice Note [voice]', message_type: 'voice' })
+                body: JSON.stringify({ 
+                    message: '/uploads/simulated_voice_note.mp3', // Placeholder URL
+                    message_type: 'voice' 
+                })
             });
-            await fetchMessages();
+            
+            if (response.ok) {
+                console.log("Voice Note sent successfully (API call ok). Fetching messages now...");
+                await fetchMessages();
+            } else {
+                const errorData = await response.json();
+                console.error("Server responded with error for voice note:", errorData);
+                alert('Failed to send voice note: ' + (errorData.error || 'Unknown error.'));
+            }
         } catch (error) {
-            console.error('Error sending simulated voice note:', error);
+            console.error('Network error sending simulated voice note:', error);
+            alert('Error sending voice note (simulated).');
         }
     });
     
@@ -761,12 +879,21 @@ function setupVoiceNoteListeners() {
 // Fetch Messages (Polling)
 async function fetchMessages() {
     const container = document.getElementById('messages-container');
-    if (!container) return;
+    if (!container) {
+        console.warn("Messages container not found for fetching messages.");
+        return;
+    }
 
     try {
         const response = await fetch('/chat/messages');
         const data = await response.json();
         
+        if (!data.messages) {
+            console.warn("API did not return messages array:", data);
+            return;
+        }
+
+        // Only scroll if user is near the bottom
         const shouldScroll = container.scrollHeight - container.clientHeight <= container.scrollTop + 50; 
 
         const newHTML = data.messages.map(msg => \`
@@ -777,9 +904,10 @@ async function fetchMessages() {
             </div>
         \`).join('');
 
-
+        // Update only if content has changed to avoid unnecessary re-renders
         if (container.innerHTML.trim() !== newHTML.trim()) {
             container.innerHTML = newHTML;
+            // Scroll to bottom after new content is added
             if (shouldScroll) {
                 container.scrollTop = container.scrollHeight;
             }
@@ -792,22 +920,27 @@ async function fetchMessages() {
 
 function renderMessageContent(msg) {
     if (msg.message_type === 'image') {
-        return \`<img src="\${msg.message_content}" alt="Image" style="max-width: 100%; border-radius: 8px;"> \`;
+        return \`<img src="\${msg.message_content}" alt="Image"> \`;
     } else if (msg.message_type === 'video') {
-        return \`<video controls src="\${msg.message_content}" style="max-width: 100%; border-radius: 8px;"></video>\`;
+        return \`<video controls src="\${msg.message_content}"></video>\`;
     } else if (msg.message_type === 'voice') {
-        return \`<div style="display: flex; align-items: center; gap: 10px;"><i class="bi bi-mic-btn-fill" style="font-size: 1.2em;"></i> Voice Note <audio controls src="\${msg.message_content || 'Simulated audio link'}"></audio></div>\`;
+        // Voice Note content (the URL) is the message_content
+        return \`<div style="display: flex; align-items: center; gap: 10px;"><i class="bi bi-mic-fill" style="font-size: 1.2em;"></i> <audio controls src="\${msg.message_content}"></audio></div>\`;
+    } else if (msg.message_type === 'heart') { // Render heart explicitly
+        return \`<i class="bi bi-heart-fill" style="color: white; font-size: 1.5em;"></i>\`; // Or whatever heart icon you prefer
     }
     return msg.message_content;
 }
 
 // --- Post & Settings Logic (Copy Link Function Included) ---
 function setupPostListeners() {
+    console.log("Setting up post listeners...");
     document.querySelectorAll('.like-button').forEach(btn => {
         btn.addEventListener('click', async function() {
             const postId = this.getAttribute('data-post-id');
             const response = await fetch(\`/posts/like/\${postId}\`, { method: 'POST' });
             if (response.ok) {
+                // BUG FIX: Reload posts view to see the change
                 loadView('posts'); 
             } else {
                 alert('Failed to process like.');
@@ -823,27 +956,35 @@ function setupPostListeners() {
             
             if (preloader) preloader.classList.add('show');
 
-            const response = await fetch('/posts/add', {
-                method: 'POST',
-                body: formData
-            });
-            
-            if (preloader) preloader.classList.remove('show');
-
-            if (response.ok) {
-                alert('Post added successfully!');
-                loadView('posts'); 
-            } else {
-                alert('Failed to add post.');
+            try {
+                const response = await fetch('/posts/add', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    alert('Post added successfully!');
+                    loadView('posts'); 
+                } else {
+                    const errorData = await response.text();
+                    alert('Failed to add post: ' + errorData);
+                }
+            } catch (error) {
+                console.error('Error adding post:', error);
+                alert('Network error while adding post.');
+            } finally {
+                if (preloader) preloader.classList.remove('show');
             }
         });
     }
 }
 
 function setupSettingsFormListeners() {
+    console.log("Setting up settings form listeners...");
     document.getElementById('profile-form')?.addEventListener('submit', setupSettingsFormSubmit);
     document.getElementById('bg-form')?.addEventListener('submit', setupSettingsFormSubmit);
-    
+    document.getElementById('bg-opacity-form')?.addEventListener('submit', setupSettingsFormSubmit); // New form
+
     document.getElementById('copy-invite-link')?.addEventListener('click', () => {
         const linkElement = document.getElementById('invite-link-text');
         if (linkElement) {
@@ -858,29 +999,40 @@ function setupSettingsFormListeners() {
     });
 }
 
-function setupSettingsFormSubmit(e) {
+async function setupSettingsFormSubmit(e) {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
     
     if (preloader) preloader.classList.add('show');
 
-    fetch(form.action, { method: 'POST', body: formData })
-        .then(res => res.text())
-        .then(html => {
-             if (preloader) preloader.classList.remove('show');
-             if (html.includes('<script>')) {
-                 document.body.innerHTML = html; 
-             } else {
+    try {
+        const response = await fetch(form.action, { method: 'POST', body: formData });
+        const textResponse = await response.text(); // Get raw text to check for script
+        
+        if (preloader) preloader.classList.remove('show');
+
+        if (response.ok) {
+            // Check if it's the chat background update that expects a script for reload
+            if (form.id === 'bg-form') { 
+                if (textResponse.includes('<script>')) {
+                    document.body.innerHTML = textResponse; // This is a full page reload trigger
+                } else {
+                    alert('Chat background updated!');
+                    loadView('settings'); // Fallback, though a full reload is expected for bg change
+                }
+            } else {
                 alert('Settings updated!');
                 loadView('settings'); 
-             }
-        })
-        .catch(err => {
-            if (preloader) preloader.classList.remove('show');
-            console.error('Settings update error:', err);
-            alert('Failed to update settings.');
-        });
+            }
+        } else {
+            alert('Failed to update settings: ' + textResponse);
+        }
+    } catch (err) {
+        if (preloader) preloader.classList.remove('show');
+        console.error('Settings update error:', err);
+        alert('Failed to update settings due to network or server error.');
+    }
 }
 
 // Global function exposed for settings button
@@ -896,13 +1048,25 @@ window.confirmBreakup = function() {
                     alert(data.message || 'Failed to delete account.');
                 }
             })
-            .catch(err => console.error('Breakup error:', err));
+            .catch(err => {
+                console.error('Breakup error:', err);
+                alert('An error occurred during breakup.');
+            });
     }
 }
 `;
 
 
-// --- HTML TEMPLATES (Embedded) ---
+// --- HTML TEMPLATES (Embedded - No Change) ---
+
+// Component for Password Input with Toggle
+const PASSWORD_INPUT = (name, placeholder) => `
+    <div class="password-container">
+        <input type="password" placeholder="${placeholder}" name="${name}" required>
+        <i class="bi bi-eye-slash-fill toggle-password"></i>
+    </div>
+`;
+
 
 const PRELOADER_HTML = `
 <div id="preloader" class="show">
@@ -918,6 +1082,7 @@ const BASE_HTML = (title, bodyContent) => `
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${title} | MiAlma</title>
+    <link rel="icon" href="./assets/bg.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>${STYLES}</style>
 </head>
@@ -959,7 +1124,7 @@ const LOGIN_PAGE = (message) => `
         <input type="text" placeholder="Enter Couple Name" name="couple_name" required>
 
         <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
+        ${PASSWORD_INPUT('password', 'Enter Password')}
             
         <button type="submit">Login</button>
     </form>
@@ -987,7 +1152,7 @@ const SIGNUP1_PAGE = (message) => `
         <input type="text" placeholder="e.g., My Star" name="partner_nickname" required>
         
         <label for="my_password"><b>Your Password</b></label>
-        <input type="password" placeholder="Enter Password" name="my_password" required>
+        ${PASSWORD_INPUT('my_password', 'Enter Password')}
             
         <button type="submit">Create Account & Get Invite Link</button>
     </form>
@@ -1023,23 +1188,32 @@ const SIGNUP2_PAGE = (coupleName, initiatedDate, token) => `
         <input type="text" placeholder="e.g., My King/Queen" name="partner_nickname" required>
         
         <label for="my_password"><b>Your Password</b></label>
-        <input type="password" placeholder="Enter Password" name="my_password" required>
+        ${PASSWORD_INPUT('my_password', 'Enter Password')}
             
         <button type="submit">Complete Join</button>
     </form>
 </div>
 `;
 
-// --- Dynamic View Templates (Loaded via AJAX) ---
+// --- Dynamic View Templates (Loaded via AJAX - Small change to Chat View for opacity fallback) ---
 
-const CHAT_VIEW = (nickname, partnerNickname, couple) => `
-<div class="app-header" style="margin-bottom: 5px;">
-    <h2><i class="bi bi-chat-heart-fill"></i> talk with ${partnerNickname}</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
+const CHAT_VIEW = (nickname, partnerNickname, couple) => {
+    // Determine background style based on couple settings
+    const opacity = (couple.chat_bg_opacity !== undefined && couple.chat_bg_opacity !== null) ? couple.chat_bg_opacity : 0.8;
+    const chatBgStyle = couple.chat_bg_url
+        ? `background-image: url('${couple.chat_bg_url}'); background-size: cover; background-position: center; opacity: ${opacity};`
+        : `background-color: var(--background-color);`; // Fallback to default if no image
+    
+    return `
+<div class="app-header">
+    <div class="header-info">
+        <img src="${couple.profile_picture_url || '/uploads/default_couple_pic.png'}" alt="Couple Photo" class="profile-pic">
+        <h2><i class="bi bi-chat-heart-fill"></i> chat with ${partnerNickname}</h2>
+    </div>
 </div>
 <div id="chat-page">
-    <div id="messages-container" style="${couple.chat_bg_url ? `background-image: url('${couple.chat_bg_url}'); background-size: cover; background-position: center;` : ''}">
-        </div>
+    <div id="messages-container" style="${chatBgStyle}">
+    </div>
     <div class="chat-input-area">
         <form id="chat-form" style="display: flex; flex-grow: 1; align-items: center;">
             <div id="chat-input-row" style="display: flex; flex-grow: 1; align-items: center;">
@@ -1061,21 +1235,26 @@ const CHAT_VIEW = (nickname, partnerNickname, couple) => `
     </div>
 </div>
 `;
+};
 
-const POSTS_VIEW = (postsHTML) => `
+const POSTS_VIEW = (couple, postsHTML) => `
 <div class="app-header">
-    <h2><i class="bi bi-image-fill"></i> Couple Posts</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
+    <div class="header-info">
+        <img src="${couple.profile_picture_url || '/uploads/default_couple_pic.png'}" alt="Couple Photo" class="profile-pic">
+        <h2><i class="bi bi-image-fill"></i> ${couple.couple_name}'s Posts</h2>
+    </div>
 </div>
 <div id="posts-list" style="overflow-y: auto; flex-grow: 1; padding-right: 5px;">
     ${postsHTML}
 </div>
 `;
 
-const ADD_POST_VIEW = `
+const ADD_POST_VIEW = (couple) => `
 <div class="app-header">
-    <h2><i class="bi bi-plus-circle-fill"></i> Add a New Post</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
+    <div class="header-info">
+        <img src="${couple.profile_picture_url || '/uploads/default_couple_pic.png'}" alt="Couple Photo" class="profile-pic">
+        <h2><i class="bi bi-plus-circle-fill"></i> Add a New Post</h2>
+    </div>
 </div>
 <div class="form-container" style="max-width: 100%; margin: 20px 0;">
     <form id="add-post-form" enctype="multipart/form-data">
@@ -1093,7 +1272,6 @@ const ADD_POST_VIEW = `
 const LEADERBOARD_VIEW = (leaderboardHTML) => `
 <div class="app-header">
     <h2><i class="bi bi-trophy-fill"></i> Leaderboard</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
 </div>
 <p style="font-size: 0.9em; color: #666;">Ranked by weighted score: (Chat Messages * 0.7) + (Post Likes * 0.3)</p>
 <div id="leaderboard-list" style="overflow-y: auto; flex-grow: 1; padding-right: 5px;">
@@ -1108,7 +1286,6 @@ const LEADERBOARD_VIEW = (leaderboardHTML) => `
 const NOTIFICATIONS_VIEW = (notificationsHTML) => `
 <div class="app-header">
     <h2><i class="bi bi-bell-fill"></i> Notifications</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
 </div>
 <div id="notifications-list" style="overflow-y: auto; flex-grow: 1; padding-right: 5px;">
     ${notificationsHTML}
@@ -1118,7 +1295,6 @@ const NOTIFICATIONS_VIEW = (notificationsHTML) => `
 const SETTINGS_VIEW = (user, couple, inviteLink) => `
 <div class="app-header">
     <h2><i class="bi bi-gear-fill"></i> Settings</h2>
-    <i class="bi bi-gear-fill settings-icon"></i>
 </div>
 <div style="overflow-y: auto; flex-grow: 1; padding-right: 5px;">
     <div class="form-container" style="max-width: 100%; margin: 0 0 20px 0; box-shadow: none; border: 1px solid #ddd;">
@@ -1128,11 +1304,11 @@ const SETTINGS_VIEW = (user, couple, inviteLink) => `
         
         <form id="profile-form" action="/settings/update-profile" method="POST" enctype="multipart/form-data">
             <label for="new_couple_name"><b>Change Couple Name</b></label>
-            <input type="text" name="new_couple_name" id="new_couple_name" placeholder="Enter new couple name (optional)">
+            <input type="text" name="new_couple_name" id="new_couple_name" placeholder="Enter new couple name (optional)" value="${couple.couple_name}">
 
             <label for="profile_pic"><b>Upload Couple Profile Picture</b></label>
             <input type="file" name="profile_pic" id="profile_pic" accept="image/*">
-            ${user.profile_picture_url ? `<img src="${user.profile_picture_url}" alt="Profile" style="max-width: 100px; border-radius: 50%; display: block; margin: 10px 0; border: 3px solid var(--secondary-color);">` : ''}
+            <img src="${couple.profile_picture_url || '/uploads/default_couple_pic.png'}" alt="Profile" style="max-width: 100px; border-radius: 50%; display: block; margin: 10px 0; border: 3px solid var(--secondary-color);">
 
             <button type="submit"><i class="bi bi-save-fill"></i> Update Profile</button>
         </form>
@@ -1156,6 +1332,13 @@ const SETTINGS_VIEW = (user, couple, inviteLink) => `
             <label for="chat_bg"><b>Upload Chat Background Image</b></label>
             <input type="file" name="chat_bg" id="chat_bg" accept="image/*" required>
             <button type="submit"><i class="bi bi-upload"></i> Set Chat Background</button>
+        </form>
+        
+        <form id="bg-opacity-form" action="/settings/update-bg-opacity" method="POST" style="margin-top: 20px;">
+            <label for="chat_bg_opacity"><b>Background Opacity (${Math.round((couple.chat_bg_opacity || 0.8) * 100)}%)</b></label>
+            <input type="range" id="chat_bg_opacity" name="chat_bg_opacity" min="0" max="1" step="0.05" value="${couple.chat_bg_opacity || 0.8}" 
+                   oninput="this.previousElementSibling.innerHTML = '<b>Background Opacity (' + Math.round(this.value * 100) + '%)</b>'">
+            <button type="submit" style="background-color: #007bff;"><i class="bi bi-sliders"></i> Set Opacity</button>
         </form>
     </div>
 
@@ -1184,7 +1367,7 @@ async function getCoupleAndUser(userId, coupleId) {
     return { user, couple };
 }
 
-// --- Authentication & Setup Routes ---
+// --- Authentication & Setup Routes (No Change) ---
 
 app.get('/', (req, res) => {
     if (req.session.userId) return res.redirect('/app');
@@ -1206,7 +1389,10 @@ app.post('/login', (req, res) => {
     `;
 
     db.query(sql, [couple_name], async (err, users) => {
-        if (err) return res.status(500).send('DB Error');
+        if (err) {
+            console.error('Login DB Error:', err);
+            return res.status(500).send('DB Error');
+        }
 
         const user = users.find(u => bcrypt.compareSync(password, u.password_hash));
 
@@ -1230,7 +1416,10 @@ app.post('/signup1', async (req, res) => {
     const { couple_name, initiated_date, my_password, partner_nickname, my_nickname } = req.body;
 
     db.query('SELECT id FROM couples WHERE couple_name = ?', [couple_name], async (err, results) => {
-        if (err) return res.status(500).send('DB Error');
+        if (err) {
+            console.error('Signup1 DB Error:', err);
+            return res.status(500).send('DB Error');
+        }
         if (results.length > 0) {
             req.session.message = 'Couple Name already taken.';
             return res.redirect('/signup1');
@@ -1241,7 +1430,7 @@ app.post('/signup1', async (req, res) => {
             const inviteToken = uuidv4(); 
             const tokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0, 19).replace('T', ' ');
 
-            db.query('START TRANSACTION', (err) => { if (err) throw err; });
+            await db.promise().query('START TRANSACTION');
 
             const coupleInsert = `INSERT INTO couples (couple_name, initiated_date, invite_token, token_expires_at) VALUES (?, ?, ?, ?)`;
             const [coupleResult] = await db.promise().query(coupleInsert, [couple_name, initiated_date, inviteToken, tokenExpiresAt]);
@@ -1250,17 +1439,16 @@ app.post('/signup1', async (req, res) => {
             const userInsert = `INSERT INTO users (couple_id, username, password_hash, nickname_to_partner, partner_nickname_to_me) VALUES (?, ?, ?, ?, ?)`;
             await db.promise().query(userInsert, [coupleId, 'Partner1', passwordHash, partner_nickname, my_nickname]);
 
-            db.query('COMMIT', (err) => { if (err) throw err; });
+            await db.promise().query('COMMIT');
 
             const inviteLink = `${req.protocol}://${req.get('host')}/signup2/${inviteToken}`;
             res.send(BASE_HTML("Invite Partner", INVITE_LINK_PAGE(couple_name, inviteLink)));
 
         } catch (error) {
-            db.query('ROLLBACK', () => {
-                console.error('Signup Error:', error);
-                req.session.message = 'A server error occurred during sign up.';
-                res.redirect('/signup1');
-            });
+            await db.promise().query('ROLLBACK');
+            console.error('Signup Error:', error);
+            req.session.message = 'A server error occurred during sign up.';
+            res.redirect('/signup1');
         }
     });
 });
@@ -1278,7 +1466,12 @@ app.get('/signup2/:token', (req, res) => {
     `;
 
     db.query(sql, [token], (err, results) => {
-        if (err || results.length === 0) {
+        if (err) {
+            console.error('Signup2 DB Error:', err);
+            req.session.message = 'DB Error during invite link validation.';
+            return res.redirect('/login');
+        }
+        if (results.length === 0) {
             req.session.message = 'Invalid or expired invite link. Please ask your partner for a new one.';
             return res.redirect('/login');
         }
@@ -1310,8 +1503,14 @@ app.post('/signup2', async (req, res) => {
     `;
 
     db.query(findSql, [token], async (err, results) => {
-        if (err || results.length === 0) {
-            req.session.message = 'Invalid or expired token.';
+        if (err) {
+            console.error('Signup2 find couple DB Error:', err);
+            req.session.message = 'DB Error finding couple.';
+            req.session.signupToken = null;
+            return res.redirect('/login');
+        }
+        if (results.length === 0) {
+            req.session.message = 'Invalid or expired token, or partner already joined.';
             req.session.signupToken = null;
             return res.redirect('/login');
         }
@@ -1321,15 +1520,20 @@ app.post('/signup2', async (req, res) => {
         try {
             const passwordHash = await bcrypt.hash(my_password, SALT_ROUNDS);
 
+            await db.promise().query('START TRANSACTION');
+
             const user2Insert = `INSERT INTO users (couple_id, username, password_hash, nickname_to_partner, partner_nickname_to_me) VALUES (?, ?, ?, ?, ?)`;
             const [user2Result] = await db.promise().query(user2Insert, [couple_id, 'Partner2', passwordHash, partner_nickname, my_nickname]);
             const user2Id = user2Result.insertId;
             
+            // Update partner's nickname for the first user, and clear invite token
             const updateSql = `
-                UPDATE users SET partner_nickname_to_me = ? WHERE id = ?;
+                UPDATE users SET nickname_to_partner = ? WHERE id = ?;
                 UPDATE couples SET invite_token = NULL, token_expires_at = NULL WHERE id = ?;
             `;
-            await db.promise().query(updateSql, [partner_nickname, p1_id, couple_id]);
+            await db.promise().query(updateSql, [my_nickname, p1_id, couple_id]);
+
+            await db.promise().query('COMMIT');
 
             req.session.signupToken = null;
             req.session.userId = user2Id;
@@ -1338,6 +1542,7 @@ app.post('/signup2', async (req, res) => {
             res.redirect('/app');
 
         } catch (error) {
+            await db.promise().query('ROLLBACK');
             console.error('Signup2 Error:', error);
             req.session.message = 'A server error occurred during sign up (2).';
             res.redirect('/login');
@@ -1371,7 +1576,7 @@ app.get('/app', isAuthenticated, async (req, res) => {
 });
 
 
-// --- Dynamic Content/View Routes ---
+// --- Dynamic Content/View Routes (No Change) ---
 
 app.get('/view/:viewName', isAuthenticated, async (req, res) => {
     const viewName = req.params.viewName;
@@ -1381,7 +1586,19 @@ app.get('/view/:viewName', isAuthenticated, async (req, res) => {
     try {
         const { user, couple } = await getCoupleAndUser(userId, coupleId);
 
-        if (!user || !couple) return res.status(404).send('User or Couple data missing.');
+        if (!user || !couple) {
+            console.error("User or Couple data missing for view:", viewName, "UserId:", userId, "CoupleId:", coupleId);
+            return res.status(404).send('User or Couple data missing.');
+        }
+        
+        // Ensure couple.chat_bg_opacity is a valid number, default to 0.8
+        if (typeof couple.chat_bg_opacity === 'string') {
+            couple.chat_bg_opacity = parseFloat(couple.chat_bg_opacity);
+        }
+        if (isNaN(couple.chat_bg_opacity) || couple.chat_bg_opacity === null) {
+            couple.chat_bg_opacity = 0.8;
+        }
+
 
         switch (viewName) {
             case 'chat':
@@ -1409,7 +1626,11 @@ app.get('/view/:viewName', isAuthenticated, async (req, res) => {
                     <div class="post">
                         <p style="color: gray; margin-bottom: 10px; font-size: 0.9em;"><i class="bi bi-person-circle"></i> <strong>Posted by: ${p.creator_nickname}</strong> on ${new Date(p.created_at).toLocaleDateString()}</p>
                         <p style="font-size: 1.1em; margin-bottom: 15px;">${p.content}</p>
-                        ${p.media_url ? `<div style="text-align: center; margin-bottom: 15px;"><img src="${p.media_url}" style="max-width: 90%; max-height: 400px; border-radius: 8px; object-fit: cover;" /></div>` : ''}
+                        ${p.media_url ? 
+                            (p.media_url.match(/\.(mp4|webm|ogg)$/i) ? 
+                            `<div style="text-align: center; margin-bottom: 15px;"><video controls src="${p.media_url}" style="max-width: 90%; max-height: 400px; border-radius: 8px; object-fit: cover;"></video></div>` : 
+                            `<div style="text-align: center; margin-bottom: 15px;"><img src="${p.media_url}" style="max-width: 90%; max-height: 400px; border-radius: 8px; object-fit: cover;" /></div>`)
+                            : ''}
                         <div class="post-actions" style="display: flex; justify-content: space-between;">
                             <button class="like-button" data-post-id="${p.id}" style="${p.is_liked > 0 ? 'background-color: var(--accent-color);' : 'background-color: #f0f0f0; color: #333;'}; width: 48%;">
                                 <i class="bi bi-heart-fill"></i> ${p.is_liked > 0 ? 'Liked!' : 'Like'} (${p.likes_count})
@@ -1418,11 +1639,11 @@ app.get('/view/:viewName', isAuthenticated, async (req, res) => {
                         </div>
                     </div>
                 `).join('');
-                res.send(POSTS_VIEW(postsHTML));
+                res.send(POSTS_VIEW(couple, postsHTML));
                 break;
             
             case 'add-post':
-                res.send(ADD_POST_VIEW);
+                res.send(ADD_POST_VIEW(couple));
                 break;
 
             case 'leaderboard':
@@ -1491,10 +1712,11 @@ app.get('/view/:viewName', isAuthenticated, async (req, res) => {
 app.get('/chat/messages', isAuthenticated, async (req, res) => {
     const coupleId = req.session.coupleId;
     const userId = req.session.userId;
+    console.log(`[Messages API] Fetching messages for Couple ID: ${coupleId}, User ID: ${userId}`);
 
     try {
         const [messages] = await db.promise().query(`
-            SELECT m.message_content, m.created_at, m.message_type, u.partner_nickname_to_me AS sender_nickname, m.user_id
+            SELECT m.message_content, m.created_at, m.message_type, m.user_id, u.partner_nickname_to_me AS sender_nickname
             FROM messages m
             JOIN users u ON m.user_id = u.id
             WHERE m.couple_id = ?
@@ -1507,9 +1729,11 @@ app.get('/chat/messages', isAuthenticated, async (req, res) => {
             created_at: m.created_at,
             message_type: m.message_type,
             sender_nickname: m.sender_nickname,
-            is_me: m.user_id === userId
+            // CRUCIAL: Check if the message user_id matches the session userId
+            is_me: m.user_id === userId 
         }));
-
+        
+        console.log(`[Messages API] Fetched ${formattedMessages.length} messages.`);
         res.json({ messages: formattedMessages });
 
     } catch (error) {
@@ -1518,18 +1742,24 @@ app.get('/chat/messages', isAuthenticated, async (req, res) => {
     }
 });
 
-// Send Text/Heart Message
+// Send Text/Heart/Voice Message
 app.post('/chat/send', isAuthenticated, async (req, res) => {
-    const { message, message_type = 'text' } = req.body;
+    const { message, message_type = 'text' } = req.body; 
     const userId = req.session.userId;
     const coupleId = req.session.coupleId;
 
-    if (!message) return res.status(400).json({ error: 'Message content is required.' });
+    if (!message && message_type !== 'heart') { 
+        return res.status(400).json({ error: 'Message content is required for non-heart messages.' });
+    }
+    
+    console.log(`[Chat Send] User: ${userId}, Type: ${message_type}, Content: ${message.substring(0, 50)}...`);
+
 
     try {
         // Insert message
         const messageInsert = 'INSERT INTO messages (couple_id, user_id, message_content, message_type) VALUES (?, ?, ?, ?)';
-        await db.promise().query(messageInsert, [coupleId, userId, message, message_type]);
+        const [result] = await db.promise().query(messageInsert, [coupleId, userId, message, message_type]);
+        console.log(`[Chat Send] Message inserted with ID: ${result.insertId}`);
 
         // Increment chat count
         const countUpdate = 'UPDATE couples SET chat_count = chat_count + 1 WHERE id = ?';
@@ -1537,7 +1767,7 @@ app.post('/chat/send', isAuthenticated, async (req, res) => {
 
         res.json({ success: true });
     } catch (error) {
-        console.error('Error sending message:', error);
+        console.error('Error sending message (DB or Server error):', error);
         res.status(500).json({ error: 'Failed to send message.' });
     }
 });
@@ -1557,11 +1787,15 @@ app.post('/chat/send-media', isAuthenticated, upload.single('media'), async (req
         messageType = 'image';
     } else if (req.file.mimetype.startsWith('video')) {
         messageType = 'video';
+    } else if (req.file.mimetype.startsWith('audio')) {
+        messageType = 'voice';
     } else {
         // Delete file if type is not supported
         fs.unlinkSync(req.file.path);
         return res.status(400).json({ error: 'Unsupported media type.' });
     }
+
+    console.log(`[Chat Send Media] User: ${userId}, Type: ${messageType}, Path: ${filePath}`);
 
     try {
         const messageInsert = 'INSERT INTO messages (couple_id, user_id, message_content, message_type) VALUES (?, ?, ?, ?)';
@@ -1578,7 +1812,7 @@ app.post('/chat/send-media', isAuthenticated, upload.single('media'), async (req
     }
 });
 
-// Add Post
+// Add Post (No Change)
 app.post('/posts/add', isAuthenticated, upload.single('media'), async (req, res) => {
     const { content } = req.body;
     const userId = req.session.userId;
@@ -1586,7 +1820,7 @@ app.post('/posts/add', isAuthenticated, upload.single('media'), async (req, res)
     let mediaUrl = null;
 
     if (!content && !req.file) {
-        return res.status(400).send('Content or media is required.');
+        return res.status(400).send('Content or media is required for a post.');
     }
 
     if (req.file) {
@@ -1603,7 +1837,7 @@ app.post('/posts/add', isAuthenticated, upload.single('media'), async (req, res)
     }
 });
 
-// Like Post
+// Like Post (No Change)
 app.post('/posts/like/:postId', isAuthenticated, async (req, res) => {
     const postId = req.params.postId;
     const userId = req.session.userId;
@@ -1635,12 +1869,11 @@ app.post('/posts/like/:postId', isAuthenticated, async (req, res) => {
     }
 });
 
-// Update Profile/Couple Info
+// Update Profile/Couple Info (No Change)
 app.post('/settings/update-profile', isAuthenticated, upload.single('profile_pic'), async (req, res) => {
     const { new_couple_name } = req.body;
     const userId = req.session.userId;
     const coupleId = req.session.coupleId;
-    let profilePicUrl = null;
     let updates = [];
     let updateValues = [];
 
@@ -1651,7 +1884,7 @@ app.post('/settings/update-profile', isAuthenticated, upload.single('profile_pic
         }
 
         if (req.file) {
-            profilePicUrl = `/uploads/${req.file.filename}`;
+            const profilePicUrl = `/uploads/${req.file.filename}`;
             updates.push('profile_picture_url = ?');
             updateValues.push(profilePicUrl);
         }
@@ -1670,7 +1903,7 @@ app.post('/settings/update-profile', isAuthenticated, upload.single('profile_pic
     }
 });
 
-// Update Chat Background
+// Update Chat Background Image (No Change)
 app.post('/settings/update-bg', isAuthenticated, upload.single('chat_bg'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send('No background file provided.');
@@ -1682,7 +1915,7 @@ app.post('/settings/update-bg', isAuthenticated, upload.single('chat_bg'), async
         const sql = 'UPDATE couples SET chat_bg_url = ? WHERE id = ?';
         await db.promise().query(sql, [bgUrl, coupleId]);
         
-        // This is sent back to the client-side JS which executes a page reload
+        // This sends a script to reload the full page to ensure CSS/JS re-evaluation
         res.send('<script>window.location.reload();</script>');
     } catch (error) {
         console.error('Error updating background:', error);
@@ -1690,12 +1923,31 @@ app.post('/settings/update-bg', isAuthenticated, upload.single('chat_bg'), async
     }
 });
 
-// Breakup (Delete Account)
+// Update Chat Background Opacity (No Change)
+app.post('/settings/update-bg-opacity', isAuthenticated, async (req, res) => {
+    const { chat_bg_opacity } = req.body;
+    const coupleId = req.session.coupleId;
+
+    if (isNaN(parseFloat(chat_bg_opacity)) || parseFloat(chat_bg_opacity) < 0 || parseFloat(chat_bg_opacity) > 1) {
+        return res.status(400).send('Invalid opacity value.');
+    }
+
+    try {
+        const sql = 'UPDATE couples SET chat_bg_opacity = ? WHERE id = ?';
+        await db.promise().query(sql, [parseFloat(chat_bg_opacity), coupleId]);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating background opacity:', error);
+        res.status(500).send('Failed to update background opacity.');
+    }
+});
+
+// Breakup (Delete Account) (No Change)
 app.post('/settings/breakup', isAuthenticated, async (req, res) => {
     const coupleId = req.session.coupleId;
 
     try {
-        db.query('START TRANSACTION');
+        await db.promise().query('START TRANSACTION');
         
         // Delete associated records first (messages, posts, likes)
         await db.promise().query('DELETE FROM messages WHERE couple_id = ?', [coupleId]);
@@ -1708,13 +1960,13 @@ app.post('/settings/breakup', isAuthenticated, async (req, res) => {
         // Delete couple
         await db.promise().query('DELETE FROM couples WHERE id = ?', [coupleId]);
         
-        db.query('COMMIT');
+        await db.promise().query('COMMIT');
 
         req.session.destroy(() => {
             res.json({ success: true });
         });
     } catch (error) {
-        db.query('ROLLBACK');
+        await db.promise().query('ROLLBACK');
         console.error('Breakup error:', error);
         res.status(500).json({ success: false, message: 'Failed to delete account due to a server error.' });
     }
